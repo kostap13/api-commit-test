@@ -2,6 +2,7 @@
 // Project: https://github.com/infobip/mobile-messaging-cordova-plugin
 // Definitions by:
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
+// JUst to test
 @Plugin({
     plugin: 'com-infobip-plugins-mobilemessaging',
     pluginRef: 'com.infobip.plugins.mobilemessaging',
