@@ -1,116 +1,136 @@
-// Type definitions for Mobile Messaging SDK 1.2.3
+// Type definitions for non-npm package mobile-messaging-cordova-plugin 1.2.9
 // Project: https://github.com/infobip/mobile-messaging-cordova-plugin
-// Definitions by: TODO:
+// Definitions by: kostap13 <https://github.com/kostap13>,
+//                 tjuric <https://github.com/tjuric>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
+
+/// <reference types="node" />
+
 declare namespace MobileMessagingCordova {
+
+    type OS = 'Android' | 'iOS';
+    type Gender = 'Male' | 'Female';
+    type Event = 'messageReceived' |
+        'notificationTapped' |
+        'tokenReceived' |
+        'registrationUpdated' |
+        'geofenceEntered' |
+        'actionTapped' |
+        'installationUpdated' |
+        'userUpdated' |
+        'personalized' |
+        'depersonalized';
 
     interface Configuration {
         /**
          * The application code of your Application from Push Portal website
          */
-        applicationCode: string,
-        geofencingEnabled?: boolean,
+        applicationCode: string;
+        geofencingEnabled?: boolean;
         /**
          * Message storage save callback
          */
-        messageStorage?: string,
-        defaultMessageStorage?: boolean,
+        messageStorage?: string;
+        defaultMessageStorage?: boolean;
         ios?: {
-            notificationTypes?: string[],
-            forceCleanup?: boolean,
+            notificationTypes?: string[];
+            forceCleanup?: boolean;
             logging?: boolean
-        },
+        };
+        android?: {
+            notificationIcon: string; // a resource name for a status bar icon (without extension), located in '/platforms/android/app/src/main/res/mipmap'
+            multipleNotifications: boolean;
+            notificationAccentColor: string;
+        };
         privacySettings?: {
-            applicationCodePersistingDisabled?: boolean,
-            userDataPersistingDisabled?: boolean,
-            carrierInfoSendingDisabled?: boolean,
+            applicationCodePersistingDisabled?: boolean;
+            userDataPersistingDisabled?: boolean;
+            carrierInfoSendingDisabled?: boolean;
             systemInfoSendingDisabled?: boolean
-        },
+        };
         notificationCategories?: [
             {
-                identifier?: string,
+                identifier?: string;
                 actions?: [
                     {
-                        identifier?: string,
-                        title?: string,
-                        foreground?: boolean,
-                        authenticationRequired?: boolean,
-                        moRequired?: boolean,
-                        destructive?: boolean,
-                        icon?: string,
-                        textInputActionButtonTitle?: string,
+                        identifier?: string;
+                        title?: string;
+                        foreground?: boolean;
+                        authenticationRequired?: boolean;
+                        moRequired?: boolean;
+                        destructive?: boolean;
+                        icon?: string;
+                        textInputActionButtonTitle?: string;
                         textInputPlaceholder?: string
-                    }
-                    ]
-            }
-            ]
+                    }]
+            }];
     }
 
     interface UserData {
-        externalUserId: string,
-        firstName?: string,
-        lastName?: string,
-        middleName?: string,
-        gender?: string, // TODO: Enum?
-        birthday?: Date
-        phones?: Array<number>,
-        emails?: Array<string>,
-        tags?: Array<string>,
-        customAttributes?: Record<string, string>
+        externalUserId: string;
+        firstName?: string;
+        lastName?: string;
+        middleName?: string;
+        gender?: Gender;
+        birthday?: Date;
+        phones?: string[];
+        emails?: string[];
+        tags?: string[];
+        customAttributes?: Record<string, string>;
     }
 
     interface Installation {
-        isPrimaryDevice?: boolean,
-        isPushRegistrationEnabled?: boolean,
-        notificationsEnabled?: boolean,
-        geoEnabled?: boolean,
-        sdkVersion?: string,
-        appVersion?: string
-        os?: string, // TODO?: Enum?
-        osVersion: string,
-        deviceManufacturer?: string,
-        deviceModel?: string,
-        deviceSecure?: boolean,
-        language?: string,
-        deviceTimezoneId?: string,
-        applicationUserId?: string,
-        deviceName?: string,
-        customAttributes?: Record<string, string>
+        isPrimaryDevice?: boolean;
+        isPushRegistrationEnabled?: boolean;
+        notificationsEnabled?: boolean;
+        geoEnabled?: boolean;
+        sdkVersion?: string;
+        appVersion?: string;
+        os?: OS;
+        osVersion: string;
+        deviceManufacturer?: string;
+        deviceModel?: string;
+        deviceSecure?: boolean;
+        language?: string;
+        deviceTimezoneId?: string;
+        applicationUserId?: string;
+        deviceName?: string;
+        customAttributes?: Record<string, string>;
     }
 
     interface UserIdentity {
-        phones?: Array<string>,
-        emails?: Array<string>,
-        externalUserId: string
+        phones?: string[];
+        emails?: string[];
+        externalUserId: string;
     }
 
     interface PersonalizeContext {
-        userIdentity: UserIdentity,
-        userAttributes?: Record<string, string>,
-        forceDepersonalize?: boolean
+        userIdentity: UserIdentity;
+        userAttributes?: Record<string, string>;
+        forceDepersonalize?: boolean;
     }
 
     interface Message {
-        messageId: string,
-        title?: string,
-        body?: string,
-        sound?: string,
-        vibrate?: string,
-        silent?: string,
-        category?: string,
-        customPayload?: Record<string, string>,
-        internalData?: string
+        messageId: string;
+        title?: string;
+        body?: string;
+        sound?: string;
+        vibrate?: string;
+        silent?: string;
+        category?: string;
+        customPayload?: Record<string, string>;
+        internalData?: string;
     }
 
     interface MobileMessagingError {
-        code: string,
-        message: string
+        code: string;
+        message: string;
     }
 
     interface DefaultMessageStorage {
-        find(messageId: string, callback: () => void): void;
+        find(messageId: string, callback: (message: Message) => void): void;
 
-        findAll(callback: () => void): void;
+        findAll(callback: (messages: Message[]) => void): void;
 
         delete(messageId: string, callback: () => void): void;
 
@@ -119,7 +139,6 @@ declare namespace MobileMessagingCordova {
 
 
     interface Api {
-
         /**
          * Starts a new Mobile Messaging session.
          *
@@ -133,33 +152,24 @@ declare namespace MobileMessagingCordova {
          * Register to event coming from MobileMessaging library.
          * The following events are supported:
          *
-         *   - messageReceived
-         *   - notificationTapped
-         *   - registrationUpdated
-         *   - tokenReceived (iOS only)
-         *	 - geofenceEntered
-         *	 - actionTapped
-         *
          * @name register
-         * @param {String} eventName
+         * @param {String} event
          * @param {Function} handler will be called when event occurs
          */
-        register(eventName: string, handler: (message: Message) => void): void;
+        register(event: Event, handler: (message: Message) => void): void;
 
-        // TODO: Maybe use one of them?
-        on(eventName: string, handler: (message: Message) => void): void;
+        on(event: Event, handler: (message: Message) => void): void;
 
         /**
          * Un register from MobileMessaging library event.
          *
          * @name unregister
-         * @param {String} eventName
+         * @param {String} event
          * @param {Function} handler will be unregistered from event
          */
-        unregister(eventName: string, handler: (message: Message) => void): void;
+        unregister(event: Event, handler: (message: Message) => void): void;
 
-        // TODO: Maybe use one of them?
-        off(eventName: string, handler: (message: Message) => void): void;
+        off(event: Event, handler: (message: Message) => void): void;
 
         /**
          * Saves user data to the server.
@@ -189,7 +199,7 @@ declare namespace MobileMessagingCordova {
          * @param {Function} callback will be called with fetched user data on success
          * @param {Function} errorCallback will be called on error
          */
-        getUser(callback: (data: object) => void, errorCallback: (error: MobileMessagingError) => void): void;
+        getUser(callback: (data: UserData) => void, errorCallback: (error: MobileMessagingError) => void): void;
 
         /**
          * Saves installation to the server.
@@ -200,7 +210,7 @@ declare namespace MobileMessagingCordova {
          * @param {Function} errorCallback will be called on error
          */
         saveInstallation(installation: MobileMessagingCordova.Installation,
-                         callback: (data: object) => void,
+                         callback: (data: MobileMessagingCordova.Installation) => void,
                          errorCallback: (error: MobileMessagingError) => void): void;
 
         /**
@@ -210,7 +220,7 @@ declare namespace MobileMessagingCordova {
          * @param {Function} callback will be called on success
          * @param {Function} errorCallback will be called on error
          */
-        fetchInstallation(callback: (data: object) => void, errorCallback: (error: MobileMessagingError) => void): void;
+        fetchInstallation(callback: (data: MobileMessagingCordova.Installation) => void, errorCallback: (error: MobileMessagingError) => void): void;
 
         /**
          * Gets locally cached installation.
@@ -219,7 +229,7 @@ declare namespace MobileMessagingCordova {
          * @param {Function} callback will be called on success
          * @param {Function} errorCallback will be called on error
          */
-        getInstallation(callback: (data: object) => void, errorCallback: (error: MobileMessagingError) => void): void;
+        getInstallation(callback: (data: Installation) => void, errorCallback: (error: MobileMessagingError) => void): void;
 
         /**
          * Sets any installation as primary for this user.
@@ -232,7 +242,7 @@ declare namespace MobileMessagingCordova {
          */
         setInstallationAsPrimary(pushRegistrationId: string,
                                  primary: boolean,
-                                 callback: (data: object) => void,
+                                 callback: (data: any) => void,
                                  errorCallback: (error: MobileMessagingError) => void): void;
 
         /**
@@ -244,7 +254,7 @@ declare namespace MobileMessagingCordova {
          * @param {Function} errorCallback will be called on error
          */
         personalize(context: MobileMessagingCordova.PersonalizeContext,
-                    callback: (data: object) => void,
+                    callback: (data: MobileMessagingCordova.PersonalizeContext) => void,
                     errorCallback: (error: MobileMessagingError) => void): void;
 
         /**
@@ -254,7 +264,7 @@ declare namespace MobileMessagingCordova {
          * @param {Function} callback will be called on success
          * @param {Function} errorCallback will be called on error
          */
-        depersonalize(callback: (data: object) => void,
+        depersonalize(callback: (data: MobileMessagingCordova.PersonalizeContext) => void,
                       errorCallback: (error: MobileMessagingError) => void): void;
 
         /**
@@ -276,7 +286,7 @@ declare namespace MobileMessagingCordova {
          * @param {Function} callback will be called upon completion
          * @param {Function} errorCallback will be called on error
          */
-        markMessagesSeen(messageIds: Array<string>,
+        markMessagesSeen(messageIds: string[],
                          callback: (data: object) => void,
                          errorCallback: (error: MobileMessagingError) => void): void;
 
@@ -294,7 +304,6 @@ declare namespace MobileMessagingCordova {
 
         defaultMessageStorage(): MobileMessagingCordova.DefaultMessageStorage | undefined;
     }
-
 }
 
 declare var MobileMessaging: MobileMessagingCordova.Api;
