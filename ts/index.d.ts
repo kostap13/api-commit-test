@@ -174,7 +174,7 @@ declare namespace MobileMessagingCordova {
          * @param errorCallback will be called on error
          */
         saveUser(userData: UserData,
-                 callback: (data: object) => void,
+                 callback: (userData: UserData) => void,
                  errorCallback: (error: MobileMessagingError) => void): void;
 
         /**
@@ -183,7 +183,7 @@ declare namespace MobileMessagingCordova {
          * @param callback will be called with fetched user data on success
          * @param errorCallback will be called on error
          */
-        fetchUser(callback: (data: object) => void, errorCallback: (error: MobileMessagingError) => void): void;
+        fetchUser(callback: (userData: UserData) => void, errorCallback: (error: MobileMessagingError) => void): void;
 
         /**
          * Gets user data from the locally stored cache.
@@ -191,7 +191,7 @@ declare namespace MobileMessagingCordova {
          * @param callback will be called with fetched user data on success
          * @param errorCallback will be called on error
          */
-        getUser(callback: (data: UserData) => void, errorCallback: (error: MobileMessagingError) => void): void;
+        getUser(callback: (userData: UserData) => void, errorCallback: (error: MobileMessagingError) => void): void;
 
         /**
          * Saves installation to the server.
@@ -210,7 +210,7 @@ declare namespace MobileMessagingCordova {
          * @param callback will be called on success
          * @param errorCallback will be called on error
          */
-        fetchInstallation(callback: (data: Installation) => void, errorCallback: (error: MobileMessagingError) => void): void;
+        fetchInstallation(callback: (installation: Installation) => void, errorCallback: (error: MobileMessagingError) => void): void;
 
         /**
          * Gets locally cached installation.
@@ -218,7 +218,7 @@ declare namespace MobileMessagingCordova {
          * @param callback will be called on success
          * @param errorCallback will be called on error
          */
-        getInstallation(callback: (data: Installation) => void, errorCallback: (error: MobileMessagingError) => void): void;
+        getInstallation(callback: (installation: Installation) => void, errorCallback: (error: MobileMessagingError) => void): void;
 
         /**
          * Sets any installation as primary for this user.
@@ -230,7 +230,7 @@ declare namespace MobileMessagingCordova {
          */
         setInstallationAsPrimary(pushRegistrationId: string,
                                  primary: boolean,
-                                 callback: (data: any) => void,
+                                 callback: (installation: Installation) => void,
                                  errorCallback: (error: MobileMessagingError) => void): void;
 
         /**
@@ -241,7 +241,7 @@ declare namespace MobileMessagingCordova {
          * @param errorCallback will be called on error
          */
         personalize(context: PersonalizeContext,
-                    callback: (data: PersonalizeContext) => void,
+                    callback: (personalizeContext: PersonalizeContext) => void,
                     errorCallback: (error: MobileMessagingError) => void): void;
 
         /**
@@ -250,7 +250,7 @@ declare namespace MobileMessagingCordova {
          * @param callback will be called on success
          * @param errorCallback will be called on error
          */
-        depersonalize(callback: (data: PersonalizeContext) => void,
+        depersonalize(callback: (personalizeContext: PersonalizeContext) => void,
                       errorCallback: (error: MobileMessagingError) => void): void;
 
         /**
@@ -261,7 +261,7 @@ declare namespace MobileMessagingCordova {
          * @param errorCallback will be called on error
          */
         depersonalizeInstallation(pushRegistrationId: string,
-                                  callback: (data: object) => void,
+                                  callback: (installation: Installation) => void,
                                   errorCallback: (error: MobileMessagingError) => void): void;
 
         /**
@@ -272,7 +272,7 @@ declare namespace MobileMessagingCordova {
          * @param errorCallback will be called on error
          */
         markMessagesSeen(messageIds: string[],
-                         callback: (data: object) => void,
+                         callback: (messages: Message[]) => void,
                          errorCallback: (error: MobileMessagingError) => void): void;
 
         /**
@@ -283,7 +283,7 @@ declare namespace MobileMessagingCordova {
          * @param errorCallback will be called on error
          */
         showDialogForError(errorCode: number,
-                           callback: (data: object) => void,
+                           callback: () => void,
                            errorCallback: (error: MobileMessagingError) => void): void;
 
         defaultMessageStorage(): DefaultMessageStorage | undefined;
